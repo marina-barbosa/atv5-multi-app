@@ -26,9 +26,10 @@ import MovieSearchEngine from "./components/MovieSearchEngine";
 import TodoApp from "./components/TodoApp";
 import QuizApp from "./components/QuizApp";
 import LanguageTranslator from "./components/LanguageTranslator";
-import Login from "./components/Login";
+import Login from "./components/pages/Login";
 import "./App.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { Dashboard } from "./components/pages/dashboard";
 
 // Estiliza o contêiner principal do aplicativo.
 const AppContainer = styled.div`
@@ -268,15 +269,17 @@ const App = () => {
   // Renderiza o componente principal.
   return (
     <AppContainer>
-      <NavBarToggle onClick={toggleNavBar}>
-        <FaBars size={24} color="#2C3E50" />
-      </NavBarToggle>
+
       {!isAuthenticated ? (
         <MainContent>
           <Login onLogin={handleLogin} />
         </MainContent>
       ) : (
         <>
+          <NavBarToggle onClick={toggleNavBar}>
+            <FaBars size={24} color="#2C3E50" />
+          </NavBarToggle>
+
           <NavBar isOpen={isNavBarOpen}>
             <StyledLink onClick={() => handleAccess(0, "QRCodeGenerator")}>
               <FaQrcode />
@@ -315,6 +318,7 @@ const App = () => {
             </button>
           </NavBar>
           <MainContent>
+            <Dashboard />
             {currentComponent ? (
               <>
                 {renderComponent()}

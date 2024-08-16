@@ -1,12 +1,9 @@
 // Importa os hooks useState e useEffect da biblioteca React para gerenciar estado e efeitos colaterais.
-import { useState, useEffect } from 'react';
-// Importa a biblioteca axios para fazer requisições HTTP.
-import axios from 'axios';
+import { useState, useEffect, useCallback } from 'react';
 // Importa a biblioteca styled-components para criar componentes estilizados.
 import styled from 'styled-components';
-
-// Define a URL da API que será usada para obter, adicionar, editar e excluir tarefas.
-const API_URL = 'http://localhost:3000/tasks';
+// Importa a biblioteca jose para decodificação do JWT
+import { decodeJwt } from 'jose';
 
 // Cria um componente estilizado chamado Container usando styled-components.
 const Container = styled.div`
@@ -134,69 +131,60 @@ const TodoApp = () => {
   const [editingTaskId, setEditingTaskId] = useState(null);
   const [editingTaskText, setEditingTaskText] = useState('');
   const [error, setError] = useState('');
+  const [currentUser, setCurrentUser] = useState('');
 
   useEffect(() => {
-    fetchTasks();
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      const decodedToken = decodeJwt(token);
+      setCurrentUser(decodedToken.username);
+    }
   }, []);
 
-  const fetchTasks = async () => {
-    try {
-      const response = await axios.get(API_URL);
-      setTasks(response.data);
-    } catch (err) {
-      handleError(err);
+  const fetchTasks = useCallback(() => {
+    const storedTasks = JSON.parse(localStorage.getItem(`tasks_${currentUser}`)) || [];
+    setTasks(storedTasks);
+  }, [currentUser]);
+
+  useEffect(() => {
+    if (currentUser) {
+      fetchTasks();
     }
+  }, [currentUser, fetchTasks]);
+
+  const saveTasks = (updatedTasks) => {
+    localStorage.setItem(`tasks_${currentUser}`, JSON.stringify(updatedTasks));
   };
 
-  const addTask = async () => {
+  const addTask = () => {
     if (task) {
-      try {
-        const newTask = { text: task };
-        const response = await axios.post(API_URL, newTask);
-        setTasks([...tasks, response.data]);
-        setTask('');
-      } catch (err) {
-        handleError(err);
-      }
+      const newTask = { id: Date.now(), text: task }; // Gerar um id único para a tarefa
+      const updatedTasks = [...tasks, newTask];
+      setTasks(updatedTasks);
+      saveTasks(updatedTasks);
+      setTask('');
     } else {
       setError('A tarefa não pode estar vazia');
     }
   };
 
-  const deleteTask = async (id) => {
-    try {
-      await axios.delete(`${API_URL}/${id}`);
-      setTasks(tasks.filter(task => task.id !== id));
-    } catch (err) {
-      handleError(err);
-    }
+  const deleteTask = (id) => {
+    const updatedTasks = tasks.filter(task => task.id !== id);
+    setTasks(updatedTasks);
+    saveTasks(updatedTasks);
   };
 
-  const updateTask = async (id) => {
-    try {
-      const updatedTask = { text: editingTaskText };
-      await axios.put(`${API_URL}/${id}`, updatedTask);
-      setTasks(tasks.map(task => (task.id === id ? { ...task, text: editingTaskText } : task)));
-      setEditingTaskId(null);
-      setEditingTaskText('');
-    } catch (err) {
-      handleError(err);
-    }
+  const updateTask = (id) => {
+    const updatedTasks = tasks.map(task => (task.id === id ? { ...task, text: editingTaskText } : task));
+    setTasks(updatedTasks);
+    saveTasks(updatedTasks);
+    setEditingTaskId(null);
+    setEditingTaskText('');
   };
 
   const editTask = (id, text) => {
     setEditingTaskId(id);
     setEditingTaskText(text);
-  };
-
-  const handleError = (err) => {
-    if (err.response) {
-      setError(`Error: ${err.response.data.message}`);
-    } else if (err.request) {
-      setError('Erro de rede. Por favor, tente novamente mais tarde.');
-    } else {
-      setError(`Error: ${err.message}`);
-    }
   };
 
   return (

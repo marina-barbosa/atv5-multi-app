@@ -57,9 +57,9 @@ export const Content = ({ currentComponent, carouselIndex, handleAccess }) => {
           {renderComponent()}
           <Button
             onClick={handleReturn}
-            bgColor="#007bff"
-            hoverColor="#0056b3"
-            textColor="white"
+            $bgColor="#007bff"
+            $hoverColor="#0056b3"
+            $textColor="white"
           >
             <FaArrowLeft style={{ marginRight: '8px' }} /> Return
           </Button>

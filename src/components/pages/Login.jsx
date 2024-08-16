@@ -15,10 +15,17 @@ const LoginForm = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   background: white;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 351px;
+  height: 287px;
+
+  h2 {
+    margin-top: 0;
+  }
 `;
 
 const Input = styled.input`
@@ -29,18 +36,25 @@ const Input = styled.input`
   width: 200px;
 `;
 
-
+const ErrorMessage = styled.p`
+  color: #e74c3c;
+  font-size: 14px;
+  margin-top: 10px;
+  text-align: center;
+`;
 
 export const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (username === 'admin' && password === 'password') {
+      setError('');
       onLogin();
     } else {
-      alert('Invalid credentials');
+      setError('Username e/ou senha incorretos. Por favor, tente novamente.');
     }
   };
 
@@ -60,6 +74,7 @@ export const Login = ({ onLogin }) => {
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
         />
+        {error && <ErrorMessage>{error}</ErrorMessage>}
         <Button
           type="submit"
           text="Login"
@@ -67,9 +82,7 @@ export const Login = ({ onLogin }) => {
           hoverColor="#0056b3"
           textColor="white"
         >Entrar</Button>
-
       </LoginForm>
     </LoginContainer>
   );
 };
-

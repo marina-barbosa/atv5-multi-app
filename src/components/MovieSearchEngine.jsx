@@ -101,18 +101,35 @@ const MovieCard = styled.div`
   }
 `;
 
+// Novo componente para exibir mensagens de erro
+const ErrorMessage = styled.div`
+  color: #ff0000;
+  background: #fff3f3;
+  border: 1px solid #ff0000;
+  padding: 15px;
+  border-radius: 5px;
+  margin-top: 20px;
+  text-align: center;
+`;
+
 // Componente principal MovieSearchEngine
 const MovieSearchEngine = () => {
   const [query, setQuery] = useState(''); // Define o estado para a consulta de busca
   const [movies, setMovies] = useState([]); // Define o estado para armazenar os filmes
+  const [error, setError] = useState(''); // Adiciona um estado para armazenar mensagens de erro
 
   // Função para buscar filmes
   const searchMovies = async () => {
     try {
-      const response = await axios.get(`http://www.omdbapi.com/?s=${query}&apikey=403abbfe`); // Faz uma requisição GET para a API OMDB
-      setMovies(response.data.Search); // Armazena os dados dos filmes no estado movies
+      const response = await axios.get(`http://www.omdbapi.com/?s=${query}&apikey=403abbfe`);
+      if (response.data.Response === "False") {
+        throw new Error(response.data.Error);
+      }
+      setMovies(response.data.Search);
+      setError(''); // Limpa o erro se a busca for bem-sucedida
     } catch (error) {
-      console.error("Error fetching movie data:", error); // Exibe um erro no console em caso de falha
+      setMovies([]); // Limpa os filmes se houver um erro
+      setError(error.message || 'Ocorreu um erro ao buscar dados do filme.'); // Define a mensagem de erro
     }
   };
 
@@ -126,6 +143,7 @@ const MovieSearchEngine = () => {
         placeholder="Search for a movie" // Placeholder do campo de entrada
       />
       <Button onClick={searchMovies}>Search</Button> {/* Botão que chama a função searchMovies quando clicado */}
+      {error && <ErrorMessage>{error}</ErrorMessage>} {/* Exibe a mensagem de erro, se houver */}
       <MoviesContainer>
         {movies && movies.map((movie) => ( // Verifica se há filmes e os mapeia para exibir MovieCard
           <MovieCard key={movie.imdbID}>

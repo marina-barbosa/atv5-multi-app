@@ -42,21 +42,7 @@ const Input = styled.input`
   }
 `;
 
-// Define o estilo do botão
-// const Button = styled.button`
-//   padding: 12px 20px;
-//   background-color: #007bff;
-//   color: white;
-//   border: none;
-//   border-radius: 5px;
-//   cursor: pointer;
-//   font-size: 16px;
-//   transition: background-color 0.3s;
 
-//   &:hover {
-//     background-color: #0056b3;
-//   }
-// `;
 
 // Define o estilo do container de resultados
 const ResultsContainer = styled.div`
@@ -68,19 +54,48 @@ const ResultsContainer = styled.div`
   width: 100%;
 `;
 
+
+// Define o estilo do container de erro
+const ErrorContainer = styled.div`
+  margin-top: 20px;
+  padding: 20px;
+  background: #f8d7da;
+  color: #721c24;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  text-align: center;
+`;
+
 // Componente principal IPAddressFinder
 const IPAddressFinder = () => {
   const [ip, setIp] = useState(''); // Define o estado para o IP digitado pelo usuário
   const [ipData, setIpData] = useState(null); // Define o estado para armazenar os dados do IP
+  const [error, setError] = useState(''); // Define o estado para armazenar mensagens de erro
 
   // Função para buscar os dados do IP
   const findIP = async () => {
+    setError(''); // Limpa a mensagem de erro antes de iniciar a busca
     try {
-      const url = `https://ipinfo.io/${ip}/json`
-      const response = await axios.get(url); // Faz uma requisição GET para a API ipinfo.io
-      setIpData(response.data); // Armazena os dados da resposta no estado ipData
+      if (!ip) {
+        setError('Por favor, insira um endereço IP.');
+        return;
+      }
+      const url = `https://ipinfo.io/${ip}/json`;
+      const response = await axios.get(url);
+
+      if (response.status === 200) {
+        setIpData(response.data);
+      } else {
+        setError('Falha ao buscar dados do endereço IP.');
+      }
     } catch (error) {
-      console.error("Error fetching IP address data:", error); // Exibe um erro no console em caso de falha
+      if (error.code === 'ERR_NETWORK') {
+        setError('Desative o Bloqueador de Anúncios');
+      } else {
+        setError('Ocorreu um erro ao buscar dados de endereço IP.');
+      }
+      console.error("Erro ao buscar dados do endereço IP:", error);
     }
   };
 
@@ -96,11 +111,17 @@ const IPAddressFinder = () => {
 
       <Button
         onClick={findIP}
-        text="Find IP"
         bgColor="#007bff"
         hoverColor="#0056b3"
         textColor="white"
-      />
+      >Find IP</Button>
+
+      {error && ( // Exibe a mensagem de erro se houver algum erro
+        <ErrorContainer>
+          <p>{error}</p>
+        </ErrorContainer>
+      )}
+
       {ipData && ( // Condicional que exibe os dados do IP se ipData não for null
         <ResultsContainer>
           <p><strong>IP:</strong> {ipData.ip}</p>

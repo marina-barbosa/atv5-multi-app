@@ -67,7 +67,7 @@ export const RegisterPage = () => {
         return;
       }
 
-      // Enviar os dados para o backend
+      // Enviar os dados para o backend de mentirinha
       const response = await fetch('http://localhost:3000/users', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

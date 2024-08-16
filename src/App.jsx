@@ -5,6 +5,7 @@ import { Dashboard } from "./components/pages/dashboard";
 import "./App.css";
 import { Login } from "./components/pages/Login";
 import { RegisterPage } from "./components/pages/registerPage";
+import { jwtVerify } from "jose"; // Importa a função jwtVerify da biblioteca jose
 
 const AppContainer = styled.div`
   display: flex;
@@ -21,32 +22,32 @@ const App = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // // Recupera o token do localStorage
-    // const token = localStorage.getItem("token");
+    const verifyToken = async () => {
+      // Recupera o token do localStorage
+      const token = localStorage.getItem("authToken");
 
-    // // Verifica se o token existe e se é válido
-    // if (token) {
-    //   try {
-    //     // Verifique o token com a chave secreta
-    //     // const decoded = jwt.verify(token, "segredo-top");
-    //     // Se o token é válido, autentica o usuário e redireciona para o dashboard
-    //     setIsAuthenticated(true);
-    //     // navigate("/dashboard");
-    //   } catch (error) {
-    //     console.error("Token inválido ou expirado:", error);
-    //     // Se o token for inválido ou expirado, redireciona para a página de login
-    //     setIsAuthenticated(false);
-    //     // navigate("/");
-    //   }
-    // } else {
-    //   // Se não houver token, redireciona para a página de login
-    //   setIsAuthenticated(false);
-    //   // navigate("/");
-    // }
+      if (token) {
+        try {
+          // Verifica o token com a chave secreta "segredo-top"
+          const secret = new TextEncoder().encode("segredo-top");
+          await jwtVerify(token, secret);
 
-    if (!isAuthenticated && window.location.pathname == "/dashboard") {
-      navigate("/");
-    }
+          // Se o token for válido, autentica o usuário
+          setIsAuthenticated(true);
+          navigate("/dashboard");
+        } catch (error) {
+          console.error("Token inválido ou expirado:", error);
+          setIsAuthenticated(false);
+          localStorage.removeItem("authToken"); // Remove o token inválido
+        }
+      }
+
+      if (!isAuthenticated && window.location.pathname === "/dashboard") {
+        navigate("/");
+      }
+    };
+
+    verifyToken();
   }, [isAuthenticated, navigate]);
 
 

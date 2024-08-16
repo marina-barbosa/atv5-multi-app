@@ -3,7 +3,7 @@ import { useNavigate, Route, Routes } from "react-router-dom";
 import styled from "styled-components";
 import { Dashboard } from "./components/pages/dashboard";
 import "./App.css";
-import { Login } from "./components/pages/login";
+import { Login } from "./components/pages/Login";
 
 const AppContainer = styled.div`
   display: flex;

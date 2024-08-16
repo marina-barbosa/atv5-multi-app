@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { Button } from '../button';
+import { useNavigate } from 'react-router-dom';
+import { SignJWT } from 'jose';
 
 const LoginContainer = styled.div`
   display: flex;
@@ -21,7 +23,7 @@ const LoginForm = styled.form`
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   width: 351px;
-  height: 287px;
+  height: auto;
 
   h2 {
     margin-top: 0;
@@ -43,19 +45,49 @@ const ErrorMessage = styled.p`
   text-align: center;
 `;
 
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+`;
+
 export const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (username === 'admin' && password === 'password') {
-      setError('');
-      onLogin();
-    } else {
-      setError('Username e/ou senha incorretos. Por favor, tente novamente.');
+
+    try {
+      const response = await fetch(`http://localhost:3000/users?username=${username}`);
+      const data = await response.json();
+
+      if (data.length > 0 && data[0].password === password) {
+        setError('');
+
+        // Gerar um token JWT usando jose
+        const token = await new SignJWT({ username: data[0].username, userId: data[0].id })
+          .setProtectedHeader({ alg: 'HS256' })
+          .setExpirationTime('1h')
+          .sign(new TextEncoder().encode('segredo-top'));
+
+        // Armazenar o token no localStorage
+        localStorage.setItem('authToken', token);
+        onLogin();
+      } else {
+        setError('Username e/ou senha incorretos. Por favor, tente novamente.');
+      }
+    } catch (err) {
+      setError('Erro ao tentar logar. Por favor, tente novamente mais tarde.');
     }
+  };
+
+  const handleRegisterClick = async (e) => {
+    e.preventDefault();
+    navigate('/register');
   };
 
   return (
@@ -75,13 +107,27 @@ export const Login = ({ onLogin }) => {
           placeholder="Password"
         />
         {error && <ErrorMessage>{error}</ErrorMessage>}
-        <Button
-          type="submit"
-          text="Login"
-          $bgColor="#007bff"
-          $hoverColor="#0056b3"
-          $textColor="white"
-        >Entrar</Button>
+        <ButtonContainer>
+          <Button
+            type="submit"
+            text="Login"
+            $bgColor="#007bff"
+            $hoverColor="#0056b3"
+            $textColor="white"
+          >
+            Entrar
+          </Button>
+          <Button
+            type="button"
+            onClick={handleRegisterClick}
+            text="Criar Conta"
+            $bgColor="#28a745"
+            $hoverColor="#218838"
+            $textColor="white"
+          >
+            Criar Conta
+          </Button>
+        </ButtonContainer>
       </LoginForm>
     </LoginContainer>
   );

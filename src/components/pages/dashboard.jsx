@@ -29,7 +29,11 @@ export const Dashboard = () => {
   };
 
   const handleLogout = () => {
+    // Remove o token JWT do localStorage
+    localStorage.removeItem('authToken');
+    // Atualiza o estado de autenticação
     setIsAuthenticated(false);
+    // Redireciona o usuário para a página de login
     navigate("/");
   };
 

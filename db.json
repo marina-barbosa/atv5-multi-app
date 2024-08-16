@@ -12,5 +12,17 @@
       "id": "575d",
       "text": "Testando..!!"
     }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "username": "admin",
+      "password": "password"
+    },
+    {
+      "id": "98c9",
+      "username": "marina",
+      "password": "123456"
+    }
   ]
 }

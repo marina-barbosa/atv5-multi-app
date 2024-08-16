@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Route, Routes } from "react-router-dom";
 import styled from "styled-components";
-import Login from "./components/pages/login";
-import Dashboard from "./components/pages/dashboard";
+import { Dashboard } from "./components/pages/dashboard";
 import "./App.css";
+import { Login } from "./components/pages/login";
 
 const AppContainer = styled.div`
   display: flex;
@@ -39,6 +39,7 @@ const App = () => {
           element={isAuthenticated ? <Dashboard /> : <Login onLogin={handleLogin} />}
         />
       </Routes>
+
     </AppContainer>
   );
 };

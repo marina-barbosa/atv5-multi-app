@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import { Button } from '../button';
 
 const LoginContainer = styled.div`
   display: flex;
@@ -28,20 +29,9 @@ const Input = styled.input`
   width: 200px;
 `;
 
-const Button = styled.button`
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
 
-  &:hover {
-    background-color: #0056b3;
-  }
-`;
 
-const Login = ({ onLogin }) => {
+export const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -70,10 +60,16 @@ const Login = ({ onLogin }) => {
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
         />
-        <Button type="submit">Login</Button>
+        <Button
+          type="submit"
+          text="Login"
+          bgColor="#007bff"
+          hoverColor="#0056b3"
+          textColor="white"
+        >Entrar</Button>
+
       </LoginForm>
     </LoginContainer>
   );
 };
 
-export default Login;

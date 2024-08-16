@@ -1,6 +1,7 @@
 // CarouselComponent.js
 import { Carousel } from "react-responsive-carousel";
 import styled from "styled-components";
+import { Button } from "./button";
 
 // Estiliza o contêiner do carrossel.
 const CarouselContainer = styled.div`
@@ -42,20 +43,6 @@ const CarouselItem = styled.div`
     color: white;
   }
 
-  button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 10px;
-    font-size: 16px;
-
-    &:hover {
-      background-color: #0056b3;
-    }
-  }
 `;
 
 // Estiliza o carrossel personalizado.
@@ -78,39 +65,60 @@ export const CarouselComponent = ({ carouselIndex, handleAccess }) => (
     >
       <CarouselItem>
         <h2>QR Code Generator</h2>
-        <button onClick={() => handleAccess(0, "QRCodeGenerator")}>
-          Acessar
-        </button>
+        <Button
+          onClick={() => handleAccess(0, "QRCodeGenerator")}
+          bgColor="#007bff"
+          hoverColor="#0056b3"
+          textColor="white"
+          >Acesse</Button>
       </CarouselItem>
       <CarouselItem>
         <h2>IP Address Finder</h2>
-        <button onClick={() => handleAccess(1, "IPAddressFinder")}>
-          Acessar
-        </button>
+        <Button
+          onClick={() => handleAccess(1, "IPAddressFinder")}
+          bgColor="#007bff"
+          hoverColor="#0056b3"
+          textColor="white"
+          >Acesse</Button>
       </CarouselItem>
       <CarouselItem>
         <h2>Movie Search Engine</h2>
-        <button onClick={() => handleAccess(2, "MovieSearchEngine")}>
-          Acessar
-        </button>
+        <Button
+          onClick={() => handleAccess(2, "MovieSearchEngine")}
+          bgColor="#007bff"
+          hoverColor="#0056b3"
+          textColor="white"
+          >Acesse</Button>
       </CarouselItem>
       <CarouselItem>
         <h2>Todo App</h2>
-        <button onClick={() => handleAccess(3, "TodoApp")}>
-          Acessar
-        </button>
+
+        <Button
+          onClick={() => handleAccess(3, "TodoApp")}
+          bgColor="#007bff"
+          hoverColor="#0056b3"
+          textColor="white"
+          >Acesse</Button>
       </CarouselItem>
       <CarouselItem>
         <h2>Quiz App</h2>
-        <button onClick={() => handleAccess(4, "QuizApp")}>
-          Acessar
-        </button>
+
+        <Button
+          onClick={() => handleAccess(4, "QuizApp")}
+          bgColor="#007bff"
+          hoverColor="#0056b3"
+          textColor="white"
+          >Acesse</Button>
       </CarouselItem>
       <CarouselItem>
         <h2>Language Translator</h2>
-        <button onClick={() => handleAccess(5, "LanguageTranslator")}>
-          Acessar
-        </button>
+
+        <Button
+          onClick={() => handleAccess(5, "LanguageTranslator")}
+          bgColor="#007bff"
+          hoverColor="#0056b3"
+          textColor="white"
+          >Acesse</Button>
       </CarouselItem>
     </CustomCarousel>
   </CarouselContainer>

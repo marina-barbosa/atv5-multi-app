@@ -10,6 +10,7 @@ import TodoApp from "./TodoApp";
 import QuizApp from "./QuizApp";
 import LanguageTranslator from "./LanguageTranslator";
 import { CarouselComponent } from "./carousel";
+import { Button } from "./button";
 
 // Estiliza o conteúdo principal do aplicativo.
 const MainContent = styled.div`
@@ -73,9 +74,14 @@ export const Content = ({ currentComponent, carouselIndex, handleAccess }) => {
       {currentComponent ? (
         <>
           {renderComponent()}
-          <ReturnButton onClick={handleReturn}>
-            <FaArrowLeft /> Return
-          </ReturnButton>
+          <Button
+            onClick={handleReturn}
+            bgColor="#007bff"
+            hoverColor="#0056b3"
+            textColor="white"
+          >
+            <FaArrowLeft style={{ marginRight: '8px' }} /> Return
+          </Button>
         </>
       ) : (
         <CarouselComponent

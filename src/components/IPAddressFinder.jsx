@@ -1,6 +1,7 @@
 import { useState } from 'react'; // Importa o hook useState do React
 import axios from 'axios'; // Importa a biblioteca axios para fazer requisições HTTP
 import styled from 'styled-components'; // Importa styled-components para estilizar os componentes
+import { Button } from './button';
 
 // Define o estilo do container principal
 const Container = styled.div`
@@ -42,20 +43,20 @@ const Input = styled.input`
 `;
 
 // Define o estilo do botão
-const Button = styled.button`
-  padding: 12px 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s;
+// const Button = styled.button`
+//   padding: 12px 20px;
+//   background-color: #007bff;
+//   color: white;
+//   border: none;
+//   border-radius: 5px;
+//   cursor: pointer;
+//   font-size: 16px;
+//   transition: background-color 0.3s;
 
-  &:hover {
-    background-color: #0056b3;
-  }
-`;
+//   &:hover {
+//     background-color: #0056b3;
+//   }
+// `;
 
 // Define o estilo do container de resultados
 const ResultsContainer = styled.div`
@@ -92,7 +93,14 @@ const IPAddressFinder = () => {
         onChange={(e) => setIp(e.target.value)} // Atualiza o estado ip conforme o usuário digita
         placeholder="Enter IP address" // Placeholder do campo de entrada
       />
-      <Button onClick={findIP}>Find IP</Button> {/* Botão que chama a função findIP quando clicado */}
+
+      <Button
+        onClick={findIP}
+        text="Find IP"
+        bgColor="#007bff"
+        hoverColor="#0056b3"
+        textColor="white"
+      />
       {ipData && ( // Condicional que exibe os dados do IP se ipData não for null
         <ResultsContainer>
           <p><strong>IP:</strong> {ipData.ip}</p>

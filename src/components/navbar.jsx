@@ -10,6 +10,7 @@ import {
   FaBars,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { Button } from './button';
 
 const StyledNavbar = styled.div`
   width: 240px;
@@ -45,14 +46,6 @@ const StyledLink = styled(Link)`
     background-color: #34495e;
     color: #ecf0f1;
   }
-`;
-
-const LogoutButton = styled.button`
-  margin-top: 20px;
-  color: white;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
 `;
 
 const NavBarToggle = styled.div`
@@ -105,9 +98,15 @@ export const Navbar = ({ handleAccess, handleLogout }) => {
           <FaGlobeAmericas />
           Translator
         </StyledLink>
-        <LogoutButton onClick={handleLogout}>
-          Logout
-        </LogoutButton>
+
+        <Button
+          onClick={handleLogout}
+          bgColor="#007bff"
+          hoverColor="#0056b3"
+          textColor="white"
+        >Logout</Button>
+
+
       </StyledNavbar>
     </>
   );

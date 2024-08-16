@@ -62,63 +62,64 @@ export const CarouselComponent = ({ carouselIndex, handleAccess }) => (
       interval={5000}
       selectedItem={carouselIndex}
       onChange={(index) => handleAccess(index, null)}
+      showThumbs={false}
     >
       <CarouselItem>
         <h2>QR Code Generator</h2>
         <Button
           onClick={() => handleAccess(0, "QRCodeGenerator")}
-          bgColor="#007bff"
-          hoverColor="#0056b3"
-          textColor="white"
-          >Acesse</Button>
+          $bgColor="#007bff"
+          $hoverColor="#0056b3"
+          $textColor="white"
+        >Acesse</Button>
       </CarouselItem>
       <CarouselItem>
         <h2>IP Address Finder</h2>
         <Button
           onClick={() => handleAccess(1, "IPAddressFinder")}
-          bgColor="#007bff"
-          hoverColor="#0056b3"
-          textColor="white"
-          >Acesse</Button>
+          $bgColor="#007bff"
+          $hoverColor="#0056b3"
+          $textColor="white"
+        >Acesse</Button>
       </CarouselItem>
       <CarouselItem>
         <h2>Movie Search Engine</h2>
         <Button
           onClick={() => handleAccess(2, "MovieSearchEngine")}
-          bgColor="#007bff"
-          hoverColor="#0056b3"
-          textColor="white"
-          >Acesse</Button>
+          $bgColor="#007bff"
+          $hoverColor="#0056b3"
+          $textColor="white"
+        >Acesse</Button>
       </CarouselItem>
       <CarouselItem>
         <h2>Todo App</h2>
 
         <Button
           onClick={() => handleAccess(3, "TodoApp")}
-          bgColor="#007bff"
-          hoverColor="#0056b3"
-          textColor="white"
-          >Acesse</Button>
+          $bgColor="#007bff"
+          $hoverColor="#0056b3"
+          $textColor="white"
+        >Acesse</Button>
       </CarouselItem>
       <CarouselItem>
         <h2>Quiz App</h2>
 
         <Button
           onClick={() => handleAccess(4, "QuizApp")}
-          bgColor="#007bff"
-          hoverColor="#0056b3"
-          textColor="white"
-          >Acesse</Button>
+          $bgColor="#007bff"
+          $hoverColor="#0056b3"
+          $textColor="white"
+        >Acesse</Button>
       </CarouselItem>
       <CarouselItem>
         <h2>Language Translator</h2>
 
         <Button
           onClick={() => handleAccess(5, "LanguageTranslator")}
-          bgColor="#007bff"
-          hoverColor="#0056b3"
-          textColor="white"
-          >Acesse</Button>
+          $bgColor="#007bff"
+          $hoverColor="#0056b3"
+          $textColor="white"
+        >Acesse</Button>
       </CarouselItem>
     </CustomCarousel>
   </CarouselContainer>

@@ -78,9 +78,9 @@ export const Login = ({ onLogin }) => {
         <Button
           type="submit"
           text="Login"
-          bgColor="#007bff"
-          hoverColor="#0056b3"
-          textColor="white"
+          $bgColor="#007bff"
+          $hoverColor="#0056b3"
+          $textColor="white"
         >Entrar</Button>
       </LoginForm>
     </LoginContainer>

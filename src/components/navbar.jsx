@@ -29,7 +29,7 @@ const StyledNavbar = styled.div`
     top: 0;
     left: 0;
     right: 0;
-    display: ${({ isOpen }) => (isOpen ? "flex" : "none")};
+    display: ${({ $isOpen }) => ($isOpen ? "flex" : "none")};
   }
 `;
 
@@ -73,7 +73,7 @@ export const Navbar = ({ handleAccess, handleLogout }) => {
       <NavBarToggle onClick={toggleNavBar}>
         <FaBars size={24} color="#2C3E50" />
       </NavBarToggle>
-      <StyledNavbar isOpen={isNavBarOpen}>
+      <StyledNavbar $isOpen={isNavBarOpen}>
         <StyledLink onClick={() => handleAccess(0, "QRCodeGenerator")}>
           <FaQrcode />
           QR Code Generator
@@ -101,9 +101,9 @@ export const Navbar = ({ handleAccess, handleLogout }) => {
 
         <Button
           onClick={handleLogout}
-          bgColor="#007bff"
-          hoverColor="#0056b3"
-          textColor="white"
+          $bgColor="#007bff"
+          $hoverColor="#0056b3"
+          $textColor="white"
         >Logout</Button>
 
 

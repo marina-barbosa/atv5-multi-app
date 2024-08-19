@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button } from '../button';
-
+// Estilização com styled-components
 const RegisterContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -50,7 +50,7 @@ const ButtonContainer = styled.div`
   align-items: center;
   gap: 10px;
 `;
-
+// Componente para a página de registro de usuários. Permite aos usuários se registrarem, verificando a disponibilidade do nome de usuário e exibindo mensagens de erro ou sucesso.
 export const RegisterPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -58,24 +58,25 @@ export const RegisterPage = () => {
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
 
+  //Verifica a disponibilidade do nome de usuário.
   const checkUsernameAvailability = async (username) => {
     const response = await fetch(`http://localhost:3000/users?username=${username}`);
     const data = await response.json();
     return data.length === 0; // Retorna true se o nome de usuário está disponível
   };
-
+  //Manipula o envio do formulário de registro.
   const handleRegister = async (e) => {
     e.preventDefault();
 
     try {
       // Verificar se o nome de usuário está disponível
       const isAvailable = await checkUsernameAvailability(username);
-      
+
       if (!isAvailable) {
         setError('Nome de usuário já em uso. Por favor, escolha outro.');
         return;
       }
-      
+
       if (username === '' || password === '') {
         setError('Todos os campos são obrigatórios.');
         return;
@@ -95,16 +96,16 @@ export const RegisterPage = () => {
       setSuccess('Conta criada com sucesso!');
       setError('');
 
-      // Redirecionar para a página de login
-      setTimeout(() => navigate('/'), 2000); // Redireciona após 2 segundos
+      // Redirecionar para a página de login após 2 segundos
+      setTimeout(() => navigate('/'), 2000);
     } catch (error) {
       setError('Erro ao criar a conta. Por favor, tente novamente.');
     }
   };
-
+  // Redireciona para a página de login
   const handleGoToLogin = async (e) => {
     e.preventDefault();
-    navigate('/'); // Redireciona para a página de login
+    navigate('/');
   };
 
   return (

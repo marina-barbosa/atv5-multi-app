@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { SignJWT } from 'jose';
 import { GoogleLogin } from '@react-oauth/google';
 import { useUser } from "../../context/UserContext";
-
+// Estilização com styled-components
 const LoginContainer = styled.div`
   display: flex;
   flex-direction: column;

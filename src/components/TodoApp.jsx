@@ -134,43 +134,7 @@ const TodoApp = () => {
   const [error, setError] = useState('');
   // const [currentUser, setCurrentUser] = useState('');
   const { currentUser } = useUser(); // Use o contexto
-
-  // useEffect(() => {
-  //   const fetchCurrentUser = async () => {
-  //     const token = localStorage.getItem("authToken");
-
-  //     if (token) {
-  //       try {
-  //         // Primeiro, tenta decodificar como um token do Google
-  //         const JWKS = createRemoteJWKSet(new URL('https://www.googleapis.com/oauth2/v3/certs'));
-
-  //         const { payload } = await jwtVerify(token, JWKS, {
-  //           issuer: "https://accounts.google.com",
-  //           audience: import.meta.env.VITE_GOOGLE_CLIENT_ID, // Verifica se o token é para o seu Client ID
-  //         });
-
-  //         // Se a verificação for bem-sucedida, define o usuário atual
-  //         setCurrentUser(payload.email); // Usa o nome ou e-mail do Google
-  //       } catch (error) {
-  //         console.warn("Não é um token do Google, tentando decodificar com o segredo local...");
-
-  //         try {
-  //           // Se a verificação com o Google falhar, tenta decodificar como um token do seu app
-  //           const secret = new TextEncoder().encode("segredo-top");
-  //           const { payload } = await jwtVerify(token, secret);
-
-  //           // Se a verificação for bem-sucedida, define o usuário atual
-  //           setCurrentUser(payload.username); // Usa o username do seu app
-  //         } catch (error) {
-  //           console.error("Token inválido ou expirado:", error);
-  //           localStorage.removeItem("authToken"); // Remove o token inválido
-  //         }
-  //       }
-  //     }
-  //   };
-  //   fetchCurrentUser();
-  // }, []);
-
+  // Função para buscar tarefas do `localStorage` associadas ao usuário atual.
   const fetchTasks = useCallback(() => {
     const storedTasks = JSON.parse(localStorage.getItem(`tasks_${currentUser}`)) || [];
     setTasks(storedTasks);
@@ -181,11 +145,11 @@ const TodoApp = () => {
       fetchTasks();
     }
   }, [currentUser, fetchTasks]);
-
+  //Função para salvar tarefas no `localStorage`.
   const saveTasks = (updatedTasks) => {
     localStorage.setItem(`tasks_${currentUser}`, JSON.stringify(updatedTasks));
   };
-
+  // Função para adicionar uma nova tarefa. Adiciona a nova tarefa à lista e salva no `localStorage`. Exibe mensagem de erro se a tarefa estiver vazia.
   const addTask = () => {
     if (task) {
       const newTask = { id: Date.now(), text: task }; // Gerar um id único para a tarefa
@@ -197,13 +161,13 @@ const TodoApp = () => {
       setError('A tarefa não pode estar vazia');
     }
   };
-
+  // Função para excluir uma tarefa. Remove a tarefa da lista e salva as mudanças no `localStorage`.
   const deleteTask = (id) => {
     const updatedTasks = tasks.filter(task => task.id !== id);
     setTasks(updatedTasks);
     saveTasks(updatedTasks);
   };
-
+  // Função para atualizar uma tarefa existente. Atualiza o texto da tarefa na lista e salva as mudanças no `localStorage`.
   const updateTask = (id) => {
     const updatedTasks = tasks.map(task => (task.id === id ? { ...task, text: editingTaskText } : task));
     setTasks(updatedTasks);
@@ -211,12 +175,12 @@ const TodoApp = () => {
     setEditingTaskId(null);
     setEditingTaskText('');
   };
-
+  // Função para iniciar a edição de uma tarefa. Define o ID da tarefa a ser editada e seu texto.
   const editTask = (id, text) => {
     setEditingTaskId(id);
     setEditingTaskText(text);
   };
-
+  // Exibe mensagem se o usuário não estiver logado
   if (!currentUser) {
     return <p>Você precisa estar logado para usar o Todo App.</p>;
   }

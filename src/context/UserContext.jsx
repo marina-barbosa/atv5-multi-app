@@ -1,4 +1,4 @@
-// src/contexts/UserContext.jsx
+// Contexto para gerenciamento do estado do usuário na aplicação. Fornece o estado do usuário atual, função para atualizar o estado e verificar o token JWT.
 import { createContext, useState, useEffect, useContext } from 'react';
 import { createRemoteJWKSet, jwtVerify } from 'jose';
 
@@ -7,7 +7,7 @@ const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
 
-
+  // Função para buscar e verificar o usuário atual com base no token JWT armazenado.
   const fetchCurrentUser = async () => {
     const token = localStorage.getItem("authToken");
 
@@ -18,7 +18,7 @@ export const UserProvider = ({ children }) => {
 
         const { payload } = await jwtVerify(token, JWKS, {
           issuer: "https://accounts.google.com",
-          audience: import.meta.env.VITE_GOOGLE_CLIENT_ID, // Verifica se o token é para o seu Client ID
+          audience: import.meta.env.VITE_GOOGLE_CLIENT_ID, // Verifica se o token é para o meu Client ID
         });
 
         // Se a verificação for bem-sucedida, define o usuário atual
@@ -35,7 +35,7 @@ export const UserProvider = ({ children }) => {
           setCurrentUser(payload.username); // Usa o username do seu app
         } catch (error) {
           console.error("Token inválido ou expirado:", error);
-          localStorage.removeItem("authToken"); // Remove o token inválido
+          localStorage.removeItem("authToken"); // Remove o token se for inválido 
           setCurrentUser(null);
         }
       }

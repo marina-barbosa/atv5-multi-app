@@ -111,9 +111,9 @@ const IPAddressFinder = () => {
 
       <Button
         onClick={findIP}
-        bgColor="#007bff"
-        hoverColor="#0056b3"
-        textColor="white"
+        $bgColor="#007bff"
+        $hoverColor="#0056b3"
+        $textColor="white"
       >Find IP</Button>
 
       {error && ( // Exibe a mensagem de erro se houver algum erro

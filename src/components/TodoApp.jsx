@@ -3,7 +3,8 @@ import { useState, useEffect, useCallback } from 'react';
 // Importa a biblioteca styled-components para criar componentes estilizados.
 import styled from 'styled-components';
 // Importa a biblioteca jose para decodificação do JWT
-import { decodeJwt } from 'jose';
+// import { createRemoteJWKSet, jwtVerify } from 'jose';
+import { useUser } from '../context/UserContext';
 
 // Cria um componente estilizado chamado Container usando styled-components.
 const Container = styled.div`
@@ -131,15 +132,44 @@ const TodoApp = () => {
   const [editingTaskId, setEditingTaskId] = useState(null);
   const [editingTaskText, setEditingTaskText] = useState('');
   const [error, setError] = useState('');
-  const [currentUser, setCurrentUser] = useState('');
+  // const [currentUser, setCurrentUser] = useState('');
+  const { currentUser } = useUser(); // Use o contexto
 
-  useEffect(() => {
-    const token = localStorage.getItem('authToken');
-    if (token) {
-      const decodedToken = decodeJwt(token);
-      setCurrentUser(decodedToken.username);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const fetchCurrentUser = async () => {
+  //     const token = localStorage.getItem("authToken");
+
+  //     if (token) {
+  //       try {
+  //         // Primeiro, tenta decodificar como um token do Google
+  //         const JWKS = createRemoteJWKSet(new URL('https://www.googleapis.com/oauth2/v3/certs'));
+
+  //         const { payload } = await jwtVerify(token, JWKS, {
+  //           issuer: "https://accounts.google.com",
+  //           audience: import.meta.env.VITE_GOOGLE_CLIENT_ID, // Verifica se o token é para o seu Client ID
+  //         });
+
+  //         // Se a verificação for bem-sucedida, define o usuário atual
+  //         setCurrentUser(payload.email); // Usa o nome ou e-mail do Google
+  //       } catch (error) {
+  //         console.warn("Não é um token do Google, tentando decodificar com o segredo local...");
+
+  //         try {
+  //           // Se a verificação com o Google falhar, tenta decodificar como um token do seu app
+  //           const secret = new TextEncoder().encode("segredo-top");
+  //           const { payload } = await jwtVerify(token, secret);
+
+  //           // Se a verificação for bem-sucedida, define o usuário atual
+  //           setCurrentUser(payload.username); // Usa o username do seu app
+  //         } catch (error) {
+  //           console.error("Token inválido ou expirado:", error);
+  //           localStorage.removeItem("authToken"); // Remove o token inválido
+  //         }
+  //       }
+  //     }
+  //   };
+  //   fetchCurrentUser();
+  // }, []);
 
   const fetchTasks = useCallback(() => {
     const storedTasks = JSON.parse(localStorage.getItem(`tasks_${currentUser}`)) || [];
@@ -186,6 +216,10 @@ const TodoApp = () => {
     setEditingTaskId(id);
     setEditingTaskText(text);
   };
+
+  if (!currentUser) {
+    return <p>Você precisa estar logado para usar o Todo App.</p>;
+  }
 
   return (
     <Container>

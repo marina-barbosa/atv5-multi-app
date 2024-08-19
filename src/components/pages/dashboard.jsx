@@ -4,6 +4,7 @@ import { Footer } from '../footer';
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from '../navbar';
+import { useUser } from '../../context/UserContext';
 
 const DashboardContainer = styled.div`
   display: flex;
@@ -18,10 +19,10 @@ const MainContentContainer = styled.div`
 `;
 
 export const Dashboard = () => {
-  const [, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
   const [currentComponent, setCurrentComponent] = useState(null);
   const [carouselIndex, setCarouselIndex] = useState(0);
+  const { setCurrentUser } = useUser(); // Use o contexto
 
   const handleAccess = (index, component) => {
     setCarouselIndex(index);
@@ -32,7 +33,7 @@ export const Dashboard = () => {
     // Remove o token JWT do localStorage
     localStorage.removeItem('authToken');
     // Atualiza o estado de autenticação
-    setIsAuthenticated(false);
+    setCurrentUser(null)
     // Redireciona o usuário para a página de login
     navigate("/");
   };

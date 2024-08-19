@@ -1,11 +1,13 @@
-import { useState, useEffect } from "react";
-import { useNavigate, Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import styled from "styled-components";
 import { Dashboard } from "./components/pages/dashboard";
 import "./App.css";
 import { Login } from "./components/pages/Login";
 import { RegisterPage } from "./components/pages/registerPage";
-import { jwtVerify } from "jose"; // Importa a função jwtVerify da biblioteca jose
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { UserProvider, useUser } from "./context/UserContext";
+
 
 const AppContainer = styled.div`
   display: flex;
@@ -15,62 +17,36 @@ const AppContainer = styled.div`
   background-color: #f0f0f0;
 `;
 
-
-
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { currentUser } = useUser();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const verifyToken = async () => {
-      // Recupera o token do localStorage
-      const token = localStorage.getItem("authToken");
-
-      if (token) {
-        try {
-          // Verifica o token com a chave secreta "segredo-top"
-          const secret = new TextEncoder().encode("segredo-top");
-          await jwtVerify(token, secret);
-
-          // Se o token for válido, autentica o usuário
-          setIsAuthenticated(true);
-          navigate("/dashboard");
-        } catch (error) {
-          console.error("Token inválido ou expirado:", error);
-          setIsAuthenticated(false);
-          localStorage.removeItem("authToken"); // Remove o token inválido
-        }
-      }
-
-      if (!isAuthenticated && window.location.pathname === "/dashboard") {
-        navigate("/");
-      }
-    };
-
-    verifyToken();
-  }, [isAuthenticated, navigate]);
-
-
-
-
-  const handleLogin = () => {
-    setIsAuthenticated(true);
-    navigate("/dashboard");
-  };
+    if (currentUser) {
+      navigate("/dashboard");
+    }
+  }, [currentUser, navigate]);
 
   return (
     <AppContainer>
+
       <Routes>
-        <Route path="/" element={<Login onLogin={handleLogin} />} />
+        <Route path="/" element={<Login />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route
-          path="/dashboard"
-          element={isAuthenticated ? <Dashboard /> : <Login onLogin={handleLogin} />}
-        />
+        <Route path="/dashboard"
+          element={currentUser ? <Dashboard /> : <Login />} />
       </Routes>
 
     </AppContainer>
   );
 };
 
-export default App;
+const AppWithProvider = () => (
+  <UserProvider>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+      <App />
+    </GoogleOAuthProvider >
+  </UserProvider>
+);
+
+export default AppWithProvider;

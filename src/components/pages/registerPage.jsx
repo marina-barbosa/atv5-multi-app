@@ -58,10 +58,24 @@ export const RegisterPage = () => {
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
 
+  const checkUsernameAvailability = async (username) => {
+    const response = await fetch(`http://localhost:3000/users?username=${username}`);
+    const data = await response.json();
+    return data.length === 0; // Retorna true se o nome de usuário está disponível
+  };
+
   const handleRegister = async (e) => {
     e.preventDefault();
 
     try {
+      // Verificar se o nome de usuário está disponível
+      const isAvailable = await checkUsernameAvailability(username);
+      
+      if (!isAvailable) {
+        setError('Nome de usuário já em uso. Por favor, escolha outro.');
+        return;
+      }
+      
       if (username === '' || password === '') {
         setError('Todos os campos são obrigatórios.');
         return;
